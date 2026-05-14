@@ -1,0 +1,70 @@
+/* hacker logic and glassmorphism */
+.glass-panel {
+  background: rgba(5, 10, 5, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.cyber-grid {
+  background-image: 
+    linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.form-field input:focus {
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+}
+
+.btn-neon {
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+  box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+.btn-neon:hover:not(:disabled) {
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.4), inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Animations */
+.card-enter {
+  animation: card-in 0.4s ease-out forwards;
+}
+
+.toast-enter {
+  animation: toast-in 0.3s ease-out forwards;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.glitch-hover:hover {
+  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0) }
+  20% { transform: translate(-2px, 2px) }
+  40% { transform: translate(-2px, -2px) }
+  60% { transform: translate(2px, 2px) }
+  80% { transform: translate(2px, -2px) }
+  100% { transform: translate(0) }
+}

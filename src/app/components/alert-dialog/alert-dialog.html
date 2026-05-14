@@ -1,0 +1,59 @@
+@if (isOpen()) {
+  <div class="alert-dialog-backdrop" (click)="onCancel()">
+    <section
+      class="alert-dialog-card"
+      (click)="$event.stopPropagation()"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-message"
+      tabindex="-1"
+    >
+      <div class="alert-dialog-header">
+        <span
+          class="alert-dialog-icon"
+          [class.alert-dialog-icon--success]="type() === 'success'"
+          [class.alert-dialog-icon--error]="type() === 'error'"
+          [class.alert-dialog-icon--warning]="type() === 'warning'"
+          aria-hidden="true"
+        >
+          <i
+            class="bi"
+            [class.bi-check2]="type() === 'success'"
+            [class.bi-x-lg]="type() === 'error'"
+            [class.bi-exclamation]="type() === 'warning'"
+          ></i>
+        </span>
+
+        <div class="alert-dialog-copy">
+          <p class="alert-dialog-eyebrow">Confirmación</p>
+          <h2 id="alert-dialog-title" class="alert-dialog-title">{{ title() }}</h2>
+        </div>
+      </div>
+
+      <p id="alert-dialog-message" class="alert-dialog-message">
+        {{ message() }}
+      </p>
+
+      <div class="alert-dialog-actions">
+        <button
+          type="button"
+          class="alert-dialog-button alert-dialog-button--secondary"
+          (click)="onCancel()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="alert-dialog-button alert-dialog-button--primary"
+          [class.alert-dialog-button--success]="type() === 'success'"
+          [class.alert-dialog-button--error]="type() === 'error'"
+          [class.alert-dialog-button--warning]="type() === 'warning'"
+          (click)="onConfirm()"
+        >
+          Confirmar
+        </button>
+      </div>
+    </section>
+  </div>
+}

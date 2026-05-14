@@ -1,0 +1,152 @@
+<div class="max-w-2xl mx-auto w-full fade-in">
+  <!-- Header section -->
+  <div class="mb-6 flex items-center justify-between">
+    <h2 class="text-2xl font-mono text-[#00ff41] font-bold tracking-widest uppercase flex items-center gap-3">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+      {{ bookId ? 'EDIT_RECORD' : 'NEW_RECORD' }}
+    </h2>
+    <a routerLink="/dashboard/books" class="text-gray-400 hover:text-white font-mono text-sm underline underline-offset-4 decoration-gray-600 hover:decoration-white transition-all">
+      [ GOTO_INDEX ]
+    </a>
+  </div>
+
+  <div class="glass-form-container p-6 sm:p-8 rounded-lg border border-[#00ff41]/20 relative overflow-hidden">
+    <!-- background grid inside form -->
+    <div class="absolute inset-0 cyber-grid opacity-50 pointer-events-none"></div>
+    
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="relative z-10 flex flex-col gap-5">
+      
+      @if (errorMsg) {
+        <div class="bg-red-500/10 border-l-4 border-red-500 p-4 text-red-500 font-mono text-sm mb-4">
+          <p class="font-bold">SYS_ERR:</p>
+          <p>{{ errorMsg }}</p>
+        </div>
+      }
+
+      <!-- Title & Author -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <label class="flex flex-col gap-2 font-mono form-field">
+          <span class="text-[#00ff41] text-xs font-bold tracking-widest">TITLE_</span>
+          <input type="text" formControlName="title" placeholder="Data structure title..." 
+            class="bg-black/60 border border-gray-700 focus:border-[#00ff41] px-4 py-2.5 rounded text-white text-sm outline-none transition-all placeholder:text-gray-700">
+          @if (form.controls.title.invalid && form.controls.title.touched) {
+            <span class="text-red-500 text-xs mt-1">* Required field</span>
+          }
+        </label>
+
+        <label class="flex flex-col gap-2 font-mono form-field">
+          <span class="text-[#00ff41] text-xs font-bold tracking-widest">AUTHOR_</span>
+          <input type="text" formControlName="author" placeholder="Author identifier..." 
+            class="bg-black/60 border border-gray-700 focus:border-[#00ff41] px-4 py-2.5 rounded text-white text-sm outline-none transition-all placeholder:text-gray-700">
+          @if (form.controls.author.invalid && form.controls.author.touched) {
+            <span class="text-red-500 text-xs mt-1">* Required field</span>
+          }
+        </label>
+      </div>
+
+      <!-- Category & Description -->
+      <div class="grid grid-cols-1 gap-5">
+        <label class="flex flex-col gap-2 font-mono form-field">
+          <span class="text-[#00ff41] text-xs font-bold tracking-widest">CATEGORY_</span>
+          <input type="text" formControlName="category" placeholder="Record category (e.g. Science Fiction)..." maxlength="100"
+            class="bg-black/60 border border-gray-700 focus:border-[#00ff41] px-4 py-2.5 rounded text-white text-sm outline-none transition-all placeholder:text-gray-700">
+          @if (form.controls.category.invalid && form.controls.category.touched) {
+            <span class="text-red-500 text-xs mt-1">* Invalid input (max 100 chars)</span>
+          }
+        </label>
+
+        <label class="flex flex-col gap-2 font-mono form-field">
+          <span class="text-[#00ff41] text-xs font-bold tracking-widest">DESCRIPTION_</span>
+          <textarea formControlName="description" rows="3" placeholder="Additional record information..." 
+            class="bg-black/60 border border-gray-700 focus:border-[#00ff41] px-4 py-2.5 rounded text-white text-sm outline-none transition-all placeholder:text-gray-700 resize-none"></textarea>
+        </label>
+      </div>
+
+      <!-- Image Uploader -->
+      <div class="flex flex-col gap-2 font-mono form-field">
+        <span class="text-[#00ff41] text-xs font-bold tracking-widest">COVER_DATA [OPTIONAL]_</span>
+        
+        @if (imagePreview) {
+          <div class="relative w-full max-w-sm rounded border border-[#00ff41]/50 overflow-hidden group">
+            <img [src]="imagePreview" alt="Book Cover" class="w-full h-auto max-h-64 object-cover">
+            <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+               <button type="button" (click)="removeImage()" class="btn-neon font-mono text-xs px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/50 rounded hover:bg-red-500 hover:text-white transition-all font-bold">
+                 [ REMOVE_IMAGE ]
+               </button>
+            </div>
+          </div>
+        } @else {
+          <label 
+            (dragover)="onDragOver($event)" 
+            (dragleave)="onDragLeave($event)" 
+            (drop)="onDrop($event)"
+            class="w-full relative flex flex-col items-center justify-center py-10 px-4 rounded border-2 border-dashed transition-all cursor-pointer bg-black/40"
+            [class.border-[#00ff41]]="dragOver"
+            [class.bg-[#00ff41]/10]="dragOver"
+            [class.border-gray-700]="!dragOver"
+            [class.hover:border-[#00ff41]/50]="!dragOver"
+          >
+            @if (isProcessingImage) {
+              <svg class="animate-spin h-6 w-6 text-[#00ff41] mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+              <span class="text-[#00ff41] text-xs font-bold">PROCESSING_IMAGE...</span>
+            } @else {
+              <svg class="w-8 h-8 text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+              <span class="text-gray-400 text-sm">Drag & drop cover file here</span>
+              <span class="text-gray-600 text-xs mt-1">or click to browse local files (< 1MB or Auto-Compress)</span>
+            }
+            <input type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+          </label>
+        }
+      </div>
+
+      <!-- Price & Stock -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <label class="flex flex-col gap-2 font-mono form-field">
+          <span class="text-[#00ff41] text-xs font-bold tracking-widest">PRICE_</span>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+            <input type="number" formControlName="price" step="0.01" 
+              class="w-full bg-black/60 border border-gray-700 focus:border-[#00ff41] pl-8 pr-4 py-2.5 rounded text-white text-sm outline-none transition-all">
+          </div>
+          @if (form.controls.price.invalid && form.controls.price.touched) {
+            <span class="text-red-500 text-xs mt-1">* Invalid amount</span>
+          }
+        </label>
+
+        <label class="flex flex-col gap-2 font-mono form-field">
+          <span class="text-[#00ff41] text-xs font-bold tracking-widest">STOCK_</span>
+          <input type="number" formControlName="stock" 
+            class="bg-black/60 border border-gray-700 focus:border-[#00ff41] px-4 py-2.5 rounded text-white text-sm outline-none transition-all">
+          @if (form.controls.stock.invalid && form.controls.stock.touched) {
+            <span class="text-red-500 text-xs mt-1">* Invalid quantity</span>
+          }
+        </label>
+      </div>
+
+      <!-- Status Toggle -->
+      <label class="flex items-center gap-3 cursor-pointer mt-2 w-max">
+        <div class="relative">
+          <input type="checkbox" formControlName="status" class="sr-only">
+          <div class="block bg-gray-800 w-12 h-6 rounded-full border border-gray-600 transition-colors" [class.bg-green-600]="form.controls.status.value"></div>
+          <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform" [class.translate-x-6]="form.controls.status.value"></div>
+        </div>
+        <span class="font-mono text-sm" [class.text-[#00ff41]]="form.controls.status.value" [class.text-gray-400]="!form.controls.status.value">
+           SYS_STATUS: {{ form.controls.status.value ? 'ONLINE' : 'OFFLINE' }}
+        </span>
+      </label>
+
+      <!-- Submit Section -->
+      <div class="mt-6 pt-6 border-t border-white/10 flex justify-end">
+        <button type="submit" [disabled]="isSubmitting" class="btn-neon font-mono text-sm px-8 py-3 bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/50 rounded hover:bg-[#00ff41] hover:text-black transition-all font-bold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+          @if(isSubmitting) {
+            <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            EXECUTING...
+          } @else {
+            {{ bookId ? 'UPDATE_RECORD' : 'COMMIT_RECORD' }}
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="h-screen w-full bg-black text-gray-200 font-sans flex flex-col md:flex-row overflow-hidden cyber-grid">
+  
+  <!-- Sidebar -->
+  <aside class="w-full md:w-64 glass-panel border-r border-[#1a3a2a] flex flex-col justify-between z-10 isolate">
+    <div>
+      <div class="p-6 border-b border-[#1a3a2a]">
+        <h1 class="text-2xl font-bold font-mono tracking-wider text-[#00ff41] glitch-hover">
+          > SYS_ADMIN
+        </h1>
+        <p class="text-xs text-gray-500 mt-2 font-mono">STATUS: <span class="text-[#00ff41]">ONLINE</span></p>
+      </div>
+
+      <nav class="p-4 space-y-2">
+        <a routerLink="/dashboard/books" routerLinkActive="active-nav"
+           class="nav-item flex items-center gap-3 px-4 py-3 rounded text-sm font-medium text-gray-400 hover:text-[#00ff41] transition-all">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          DATABASE
+        </a>
+      </nav>
+    </div>
+
+    <div class="p-4">
+      <button [routerLink]="['/login']" [queryParams]="{reason: 'logout'}" class="w-full text-left flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-500/10 rounded transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        TERMINATE
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 overflow-x-hidden overflow-y-auto z-10 glass-content relative">
+    <div class="h-full w-full max-w-7xl mx-auto p-4 md:p-8 animate-fade-in-up">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
